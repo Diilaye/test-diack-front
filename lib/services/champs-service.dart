@@ -5,6 +5,7 @@ class ChampService {
   Future<ChampsFormulaireModel?> add(Map<String, dynamic> body) {
     print(body);
     return postResponse(url: '/champs', body: body).then((value) async {
+      print("add ChampsFormulaireModel");
       print(value);
       if (value['status'] == 201) {
         return ChampsFormulaireModel.fromJson(value['body']['data']);
@@ -18,6 +19,8 @@ class ChampService {
     return getResponse(
       url: '/champs/formulaire/$id',
     ).then((value) async {
+      print("allForm");
+      print(value);
       if (value['status'] == 200) {
         return ChampsFormulaireModel.fromList(data: value['body']['data'])
             .reversed

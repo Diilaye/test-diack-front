@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: constant_identifier_names
-const String BASE_URL = "https://api-form.nataal.shop/v1/api";
-const String BASE_URL_ASSET = "https://api-form.nataal.shop/swaped-file/";
-// const String BASE_URL = "https://481e-41-82-214-214.ngrok-free.app/v1/api";
+// const String BASE_URL = "https://api-form.nataal.shop/v1/api";
+// const String BASE_URL_ASSET = "https://api-form.nataal.shop/swaped-file/";
+const String BASE_URL_ASSET = "http://127.0.0.1:4013/swaped-file/";
+const String BASE_URL = "http://127.0.0.1:4013/v1/api";
 
 Future getResponse({
   required String url,

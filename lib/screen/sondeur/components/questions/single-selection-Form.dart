@@ -6,6 +6,7 @@ import 'package:form/blocs/formulaire-sondeur-bloc.dart';
 import 'package:form/models/champs-formulaire-model.dart';
 import 'package:form/utils/colors-by-dii.dart';
 import 'package:form/utils/request-dialog.dart';
+import 'package:form/utils/rdn-id.dart';
 import 'package:form/utils/widget/padding-global.dart';
 import 'package:provider/provider.dart';
 
@@ -243,8 +244,11 @@ class _SingleSelectionFormState extends State<SingleSelectionForm> {
                                 paddingHorizontalGlobal(8),
                                 IconButton(
                                   onPressed: () => formulaireSondeurBloc
-                                      .addChampsFormulaireOptions(
-                                          widget.champ.id!),
+                                      .addChampFormulaireResponseMultiChoice(
+                                          widget.champ.id!,
+                                          makeId(20),
+                                          'Nouvelle option',
+                                          'false'),
                                   icon: Icon(
                                     CupertinoIcons.add,
                                     color: noir,

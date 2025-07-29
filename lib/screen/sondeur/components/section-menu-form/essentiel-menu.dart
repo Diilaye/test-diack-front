@@ -1,120 +1,190 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:form/blocs/formulaire-sondeur-bloc.dart';
-import 'package:form/screen/sondeur/components/menu-textfield.dart';
-import 'package:form/utils/colors-by-dii.dart';
-import 'package:form/utils/widget/padding-global.dart';
 import 'package:provider/provider.dart';
 
-class EssentielSectionMenu extends StatefulWidget {
+class EssentielSectionMenu extends StatelessWidget {
   const EssentielSectionMenu({super.key});
 
-  @override
-  State<EssentielSectionMenu> createState() => _EssentielSectionMenuState();
-}
-
-class _EssentielSectionMenuState extends State<EssentielSectionMenu> {
-  bool isOpen = true;
   @override
   Widget build(BuildContext context) {
     final formulaireSondeur = Provider.of<FormulaireSondeurBloc>(context);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () => setState(() {
-            isOpen = !isOpen;
-          }),
+        Text(
+          "Champs de base",
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 12,
+            fontFamily: 'Rubik',
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ..._buildEssentialFields(formulaireSondeur),
+      ],
+    );
+  }
+
+  List<Widget> _buildEssentialFields(FormulaireSondeurBloc formulaireSondeur) {
+    final fields = [
+      {
+        'text': 'Champ de texte',
+        'subtitle': 'Saisie de texte simple',
+        'iconData': 'assets/images/text-fields.svg',
+        'color': const Color(0xFF3B82F6),
+        'onpress': () async {
+          formulaireSondeur.addChampFormulaire(
+              formulaireSondeur.formulaireSondeurModel!.id!);
+        },
+      },
+      {
+        'text': 'Zone de texte',
+        'subtitle': 'Saisie de texte long',
+        'iconData': 'assets/images/description.svg',
+        'color': const Color(0xFF10B981),
+        'onpress': () async {
+          formulaireSondeur.addChampFormulaireType(
+              formulaireSondeur.formulaireSondeurModel!.id!, "textArea");
+        },
+      },
+      {
+        'text': 'Date',
+        'subtitle': 'Sélection de date',
+        'iconData': 'assets/images/calendar.svg',
+        'color': const Color(0xFFFF6B35),
+        'onpress': () async {
+          formulaireSondeur.addChampFormulaireType(
+              formulaireSondeur.formulaireSondeurModel!.id!, "date");
+        },
+      },
+      {
+        'text': 'Choix unique',
+        'subtitle': 'Une seule option',
+        'iconData': 'assets/images/cercle.svg',
+        'color': const Color(0xFF8B5CF6),
+        'onpress': () async {
+          formulaireSondeur.addChampFormulaireType(
+              formulaireSondeur.formulaireSondeurModel!.id!, "singleChoice");
+        },
+      },
+      {
+        'text': 'Oui/Non',
+        'subtitle': 'Question binaire',
+        'iconData': 'assets/images/yin-yang.svg',
+        'color': const Color(0xFFEF4444),
+        'onpress': () async {
+          formulaireSondeur.addChampFormulaireType(
+              formulaireSondeur.formulaireSondeurModel!.id!, "yesno");
+        },
+      },
+      {
+        'text': 'Choix multiple',
+        'subtitle': 'Plusieurs options',
+        'iconData': 'assets/images/shapes.svg',
+        'color': const Color(0xFFF59E0B),
+        'onpress': () async {
+          formulaireSondeur.addChampFormulaireType(
+              formulaireSondeur.formulaireSondeurModel!.id!, "multiChoice");
+        },
+      },
+    ];
+
+    return fields.map((field) => _buildModernFieldItem(field)).toList();
+  }
+
+  Widget _buildModernFieldItem(Map<String, dynamic> field) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => field['onpress'](),
+          borderRadius: BorderRadius.circular(12),
           child: Container(
-            height: 40,
-            color: gris,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.grey[200]!,
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
             child: Row(
               children: [
-                paddingHorizontalGlobal(8),
-                Text(
-                  "${"é".toUpperCase()}ssentiels",
-                  style: TextStyle(
-                      color: noir,
-                      fontSize: 14,
-                      fontFamily: 'Rubik',
-                      fontWeight: FontWeight.bold),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: (field['color'] as Color).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SvgPicture.asset(
+                    field['iconData'],
+                    color: field['color'],
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
-                const Spacer(),
-                Icon(
-                  isOpen
-                      ? CupertinoIcons.chevron_up
-                      : CupertinoIcons.chevron_down,
-                  size: 12,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        field['text'],
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Rubik',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        field['subtitle'],
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'Rubik',
+                          color: Colors.grey[600],
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                paddingHorizontalGlobal(8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                  child: Icon(
+                    CupertinoIcons.add,
+                    size: 18,
+                    color: Colors.grey[600],
+                  ),
+                ),
               ],
             ),
           ),
         ),
-        if (isOpen)
-          Column(
-            children: [
-              // MenuTexftField(
-              //   text: "Cover",
-              //   iconData: "assets/images/image-cover.svg",
-              //   color: jaune,
-              // ),
-              // MenuTexftField(
-              //   text: "Logo",
-              //   iconData: "assets/images/logo.svg",
-              //   color: noir,
-              // ),
-              MenuTexftField(
-                text: "TextField",
-                iconData: "assets/images/text-fields.svg",
-                color: orange,
-                onpress: () async {
-                  formulaireSondeur.addChampFormulaire(
-                      formulaireSondeur.formulaireSondeurModel!.id!);
-                },
-              ),
-              MenuTexftField(
-                text: "TextArea",
-                iconData: "assets/images/description.svg",
-                color: bleu,
-                onpress: () async {
-                  formulaireSondeur.addChampFormulaireType(
-                      formulaireSondeur.formulaireSondeurModel!.id!,
-                      "textArea");
-                },
-              ),
-              MenuTexftField(
-                text: "Singleton",
-                iconData: "assets/images/cercle.svg",
-                color: rouge,
-                onpress: () async {
-                  formulaireSondeur.addChampFormulaireType(
-                      formulaireSondeur.formulaireSondeurModel!.id!,
-                      "singleChoice");
-                },
-              ),
-              MenuTexftField(
-                text: "Oui/Non",
-                iconData: "assets/images/yin-yang.svg",
-                color: rouge,
-                onpress: () async {
-                  formulaireSondeur.addChampFormulaireType(
-                      formulaireSondeur.formulaireSondeurModel!.id!, "yesno");
-                },
-              ),
-              MenuTexftField(
-                text: "Selection multiple",
-                iconData: "assets/images/shapes.svg",
-                color: vert,
-                onpress: () async {
-                  formulaireSondeur.addChampFormulaireType(
-                      formulaireSondeur.formulaireSondeurModel!.id!,
-                      "multiChoice");
-                },
-              ),
-            ],
-          )
-      ],
+      ),
     );
   }
 }

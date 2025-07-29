@@ -1,5 +1,6 @@
 import 'package:form/models/formulaire-sondeur-model.dart';
 import 'package:form/models/response-sondeur-model.dart';
+import 'package:form/models/champs-formulaire-model.dart';
 import 'package:form/utils/requette-by-dii.dart';
 
 class FormulaireService {
@@ -94,6 +95,68 @@ class FormulaireService {
         return ReponseSondeurModel.fromJson(value['body']['data']);
       } else {
         return null;
+      }
+    });
+  }
+
+  /// Récupérer les champs d'un formulaire pour répondre
+  Future<List<ChampsFormulaireModel>> getFormulaireChamps(
+      String formulaireId) async {
+    return getResponse(
+      url: '/champs/formulaire/$formulaireId',
+    ).then((value) {
+      if (value['status'] == 200) {
+        final List<dynamic> champsData = value['body']['data'];
+        return champsData
+            .map((champ) => ChampsFormulaireModel.fromJson(champ))
+            .toList();
+      } else {
+        return [];
+      }
+    });
+  }
+
+  /// Soumettre une réponse de formulaire partagé
+  Future<bool> submitSharedFormResponse({
+    required String shareId,
+    required Map<String, dynamic> responses,
+  }) async {
+    final body = {
+      'shareId': shareId,
+      'responses': responses,
+    };
+
+    return postResponse(url: '/share/submit-response', body: body)
+        .then((value) {
+      if (value['status'] == 201 || value['status'] == 200) {
+        return true;
+      } else {
+        print('Erreur soumission réponse: ${value['body']}');
+        return false;
+      }
+    });
+  }
+
+  /// Soumettre une réponse de sonde
+  Future<bool> submitSondeResponse({
+    required String formulaireId,
+    required String sondeId,
+    required Map<String, dynamic> responses,
+  }) async {
+    final body = {
+      'sondeId': sondeId,
+      'responses': responses,
+    };
+
+    return postResponse(
+            url: '/formulaires-reponses/sondee/$formulaireId', body: body)
+        .then((value) {
+      if (value['status'] == 201 || value['status'] == 200) {
+        print('Réponse sonde soumise avec succès: ${value['body']}');
+        return true;
+      } else {
+        print('Erreur soumission réponse sonde: ${value['body']}');
+        return false;
       }
     });
   }

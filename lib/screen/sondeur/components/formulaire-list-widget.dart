@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form/blocs/formulaire-sondeur-bloc.dart';
 import 'package:form/models/formulaire-sondeur-model.dart';
+import 'package:form/screen/sondeur/page-extentions/share-form-page.dart';
 import 'package:form/utils/colors-by-dii.dart';
 import 'package:form/utils/get-date-by-dii.dart';
 import 'package:form/utils/widget/padding-global.dart';
@@ -128,7 +129,15 @@ class FormulaireListWidget extends StatelessWidget {
               iconSize: 24,
               icon: Icon(CupertinoIcons.pencil)),
           IconButton(
-              onPressed: () => print('Show'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ShareFormPage(formulaire: formulaireSondeur),
+                  ),
+                );
+              },
               iconSize: 24,
               icon: Icon(CupertinoIcons.share)),
           IconButton(

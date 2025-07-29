@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:form/blocs/champs-bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:form/blocs/formulaire-sondeur-bloc.dart';
+import 'package:form/screen/sondeur/page-extentions/share-form-page.dart';
 import 'package:form/utils/colors-by-dii.dart';
 import 'package:form/utils/response-ui.dart';
-import 'package:form/utils/upload-file.dart';
 import 'package:form/utils/widget/padding-global.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,6 @@ class ViewFormulaireScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formulaireSondeur = Provider.of<FormulaireSondeurBloc>(context);
-    final champsBloc = Provider.of<ChampsBloc>(context);
     Size size = MediaQuery.of(context).size;
     double w = deviceName(size) == ScreenType.Desktop
         ? size.width * .4
@@ -24,9 +23,29 @@ class ViewFormulaireScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: gris,
         appBar: AppBar(
-          toolbarHeight: .0,
-          elevation: .0,
+          elevation: 0,
           backgroundColor: blanc,
+          iconTheme: IconThemeData(color: noir),
+          title: Text(
+            'Visualisation du formulaire',
+            style: TextStyle(color: noir, fontSize: 16),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(CupertinoIcons.share, color: noir),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShareFormPage(
+                      formulaire: formulaireSondeur.formulaireSondeurModel!,
+                    ),
+                  ),
+                );
+              },
+              tooltip: 'Partager le formulaire',
+            ),
+          ],
         ),
         body: ListView(
           children: [

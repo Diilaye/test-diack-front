@@ -179,8 +179,6 @@ class FormulaireSondeurBloc with ChangeNotifier {
   List<ChampsFormulaireModel> listeChampForm = [];
 
   getAllChampForm() async {
-    print("formulaireSondeurModel!.id!");
-    print(formulaireSondeurModel!.id!);
     listeChampForm = await champService.allForm(formulaireSondeurModel!.id!);
 
     notifyListeners();
