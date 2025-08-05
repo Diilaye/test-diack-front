@@ -32,7 +32,30 @@ class _FormResponseFieldState extends State<FormResponseField> {
   @override
   void didUpdateWidget(FormResponseField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.value != widget.value) {
+    // Ne réinitialiser que si la valeur du widget a changé mais que le contrôleur
+    // ne contient pas déjà cette valeur (éviter la boucle infinie)
+    if (oldWidget.value != widget.value && 
+        widget.value != null &&
+        (widget.champ.type == 'textField' ||
+         widget.champ.type == 'text' ||
+         widget.champ.type == 'textArea' ||
+         widget.champ.type == 'email' ||
+         widget.champ.type == 'telephone' ||
+         widget.champ.type == 'nomComplet' ||
+         widget.champ.type == 'addresse') &&
+        _controller.text != widget.value.toString()) {
+      // Seulement réinitialiser pour les types non-texte ou si le texte est différent
+      _initializeValue();
+    } else if (oldWidget.value != widget.value && 
+               widget.value != null &&
+               widget.champ.type != 'textField' &&
+               widget.champ.type != 'text' &&
+               widget.champ.type != 'textArea' &&
+               widget.champ.type != 'email' &&
+               widget.champ.type != 'telephone' &&
+               widget.champ.type != 'nomComplet' &&
+               widget.champ.type != 'addresse') {
+      // Pour les autres types (multiChoice, date, etc.), toujours réinitialiser
       _initializeValue();
     }
   }
@@ -46,12 +69,34 @@ class _FormResponseFieldState extends State<FormResponseField> {
   void _initializeValue() {
     if (widget.value != null) {
       if (widget.champ.type == 'textField' ||
+          widget.champ.type == 'text' ||
           widget.champ.type == 'textArea' ||
           widget.champ.type == 'email' ||
           widget.champ.type == 'telephone' ||
           widget.champ.type == 'nomComplet' ||
           widget.champ.type == 'addresse') {
-        _controller.text = widget.value.toString();
+        String newText = widget.value.toString();
+        // Ne mettre à jour que si le texte est vraiment différent
+        if (_controller.text != newText) {
+          // Sauvegarder la position actuelle du curseur
+          int cursorPosition = _controller.selection.start;
+          _controller.text = newText;
+          
+          // Restaurer la position du curseur à la fin si possible
+          int newCursorPosition = cursorPosition;
+          if (newCursorPosition > newText.length) {
+            newCursorPosition = newText.length;
+          }
+          
+          // Seulement restaurer le curseur si le widget est monté et focusé
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: newCursorPosition),
+              );
+            }
+          });
+        }
       } else if (widget.champ.type == 'multiChoice') {
         _selectedOptions = List<String>.from(widget.value ?? []);
       } else if (widget.champ.type == 'date') {
@@ -64,6 +109,17 @@ class _FormResponseFieldState extends State<FormResponseField> {
 
   @override
   Widget build(BuildContext context) {
+    // Pour les types spéciaux qui ne nécessitent pas de titre séparé
+    if (widget.champ.type == 'separator' || 
+        widget.champ.type == 'separator-title' || 
+        widget.champ.type == 'separatorTitre' || 
+        widget.champ.type == 'explication') {
+      return Container(
+        padding: const EdgeInsets.all(20),
+        child: _buildInputField(),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -105,6 +161,7 @@ class _FormResponseFieldState extends State<FormResponseField> {
   Widget _buildInputField() {
     switch (widget.champ.type) {
       case 'textField':
+      case 'text':
       case 'nomComplet':
       case 'email':
       case 'telephone':
@@ -135,6 +192,10 @@ class _FormResponseFieldState extends State<FormResponseField> {
 
       case 'separator':
         return _buildSeparator();
+
+      case 'separator-title':
+      case 'separatorTitre':
+        return _buildSeparatorWithTitle();
 
       case 'explication':
         return _buildExplanation();
@@ -420,29 +481,95 @@ class _FormResponseFieldState extends State<FormResponseField> {
     );
   }
 
+  Widget _buildSeparatorWithTitle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 10),
+        if (widget.champ.nom != null && widget.champ.nom!.isNotEmpty) ...[
+          Text(
+            widget.champ.nom!,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+        Container(
+          height: 3,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                vert.withOpacity(0.3),
+                vert,
+                vert.withOpacity(0.3),
+                Colors.transparent,
+              ],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
   Widget _buildExplanation() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.blue[200]!),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.info_outline,
-            color: Colors.blue[600],
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              widget.champ.description ?? 'Information',
-              style: TextStyle(
-                color: Colors.blue[800],
-                fontWeight: FontWeight.w500,
+          // Header avec icône
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.info_outline,
+                color: Colors.blue[600],
+                size: 20,
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Titre de l'explication
+                    if (widget.champ.nom != null && widget.champ.nom!.isNotEmpty)
+                      Text(
+                        widget.champ.nom!,
+                        style: TextStyle(
+                          color: Colors.blue[800],
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    // Description de l'explication
+                    if (widget.champ.description != null && widget.champ.description!.isNotEmpty) ...[
+                      if (widget.champ.nom != null && widget.champ.nom!.isNotEmpty)
+                        const SizedBox(height: 8),
+                      Text(
+                        widget.champ.description!,
+                        style: TextStyle(
+                          color: Colors.blue[700],
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

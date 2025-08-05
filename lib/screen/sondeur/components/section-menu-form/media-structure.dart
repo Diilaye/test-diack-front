@@ -49,7 +49,7 @@ class MediaStructureSectionMenu extends StatelessWidget {
         'color': const Color(0xFF3B82F6),
         'onpress': () async {
           formulaireSondeur.addChampFormulaireType(
-              formulaireSondeur.formulaireSondeurModel!.id!, "separatorTitre");
+              formulaireSondeur.formulaireSondeurModel!.id!, "separator-title");
         },
       },
       {

@@ -361,7 +361,9 @@ class FormulaireSondeurBloc with ChangeNotifier {
     await champService.add({
       "type": type,
       'idForm': id,
-      "description": "Description de cette question",
+      "description": type == "explication" 
+          ? "Ajoutez ici le texte d'explication qui sera affiché aux répondants."
+          : "Description de cette question",
       "nom": type == 'nomComplet'
           ? "Veuillez renseigner votre nom complet ?"
           : type == "email"
@@ -377,7 +379,7 @@ class FormulaireSondeurBloc with ChangeNotifier {
                               : type == "separator-title"
                                   ? "Titre séparateur"
                                   : type == "explication"
-                                      ? "Explication"
+                                      ? "Titre de l'explication"
                                       : "Questions à poser",
     });
     getAllChampForm();

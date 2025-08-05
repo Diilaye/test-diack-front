@@ -218,11 +218,29 @@ class _SondeResponsePageState extends State<SondeResponsePage>
   List<ChampsFormulaireModel> _createTestChamps() {
     return [
       ChampsFormulaireModel(
+        id: 'intro_explanation',
+        nom: 'Bienvenue dans notre enquête de satisfaction',
+        type: 'explication',
+        isObligatoire: '0',
+        description: 'Cette enquête nous permettra d\'améliorer nos services. Veuillez répondre avec sincérité. Toutes vos réponses sont confidentielles et anonymes.',
+      ),
+      ChampsFormulaireModel(
+        id: 'section_separator',
+        nom: 'Informations personnelles',
+        type: 'separator-title',
+        isObligatoire: '0',
+      ),
+      ChampsFormulaireModel(
         id: 'champ1',
         nom: 'Votre nom complet',
         type: 'text',
         isObligatoire: '1',
         description: 'Veuillez entrer votre nom complet',
+      ),
+      ChampsFormulaireModel(
+        id: 'simple_separator',
+        type: 'separator',
+        isObligatoire: '0',
       ),
       ChampsFormulaireModel(
         id: 'champ2',
@@ -243,6 +261,13 @@ class _SondeResponsePageState extends State<SondeResponsePage>
         type: 'textarea',
         isObligatoire: '0',
         description: 'Partagez vos commentaires ou suggestions',
+      ),
+      ChampsFormulaireModel(
+        id: 'outro_explanation',
+        nom: 'Merci pour votre participation !',
+        type: 'explication',
+        isObligatoire: '0',
+        description: 'Vos réponses ont été prises en compte. Elles nous aideront à améliorer nos services pour mieux vous servir à l\'avenir.',
       ),
     ];
   }
@@ -520,6 +545,14 @@ class _SondeResponsePageState extends State<SondeResponsePage>
   bool _isCurrentPageValid() {
     final champsForPage = _getChampsForPage(_currentPage);
     for (final champ in champsForPage) {
+      // Ignorer les champs non-interactifs (séparateurs et explications)
+      if (champ.type == 'separator' || 
+          champ.type == 'separator-title' || 
+          champ.type == 'separatorTitre' || 
+          champ.type == 'explication') {
+        continue;
+      }
+      
       if (champ.isObligatoire == '1') {
         final response = _responses[champ.id];
         if (response == null ||
@@ -603,6 +636,14 @@ class _SondeResponsePageState extends State<SondeResponsePage>
 
   bool _validateAllRequiredFields() {
     for (final champ in _champs) {
+      // Ignorer les champs non-interactifs (séparateurs et explications)
+      if (champ.type == 'separator' || 
+          champ.type == 'separator-title' || 
+          champ.type == 'separatorTitre' || 
+          champ.type == 'explication') {
+        continue;
+      }
+      
       if (champ.isObligatoire == '1') {
         final response = _responses[champ.id];
         if (response == null ||
@@ -652,6 +693,14 @@ class _SondeResponsePageState extends State<SondeResponsePage>
 
       // Grouper les réponses par type de champ
       for (final champ in _champs) {
+        // Ignorer les champs non-interactifs (séparateurs et explications)
+        if (champ.type == 'separator' || 
+            champ.type == 'separator-title' || 
+            champ.type == 'separatorTitre' || 
+            champ.type == 'explication') {
+          continue;
+        }
+        
         if (_responses.containsKey(champ.id)) {
           final champType = _mapChampTypeForAPI(champ.type);
 

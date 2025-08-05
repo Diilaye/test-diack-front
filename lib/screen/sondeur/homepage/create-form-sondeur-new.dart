@@ -1204,18 +1204,19 @@ class _CreateFormSondeurScreenState extends State<CreateFormSondeurScreen>
         questionWidget = FileFieldForm(champ: champ);
         break;
       case "separator":
-        questionWidget = SeparatorFielForm(champ: champ);
-        break;
+        // Pour le séparateur, on retourne directement le widget sans conteneur
+        return SeparatorFielForm(champ: champ);
       case "separator-title":
-        questionWidget = SeparatorFielWithTitleForm(champ: champ);
-        break;
+        // Pour le séparateur avec titre, on retourne directement le widget sans conteneur
+        return SeparatorFielWithTitleForm(champ: champ);
       case "explication":
-        questionWidget = ExplicationForm(champ: champ);
-        break;
+        // Pour l'explication, on retourne directement le widget sans conteneur
+        return ExplicationForm(champ: champ);
       default:
         questionWidget = Container();
     }
 
+    // Pour les autres types de questions, on applique la décoration normale
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
