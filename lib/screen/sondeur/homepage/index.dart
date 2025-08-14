@@ -631,7 +631,7 @@ class _IndexSondeurState extends State<IndexSondeur>
               prefs.clear().then((value) {
                 if (value) {
                   js.context.callMethod(
-                      'open', ['https://test-diack.nataal.shop/', '_self']);
+                      'open', ['https://test-diag.saharux.com/', '_self']);
                 }
               });
             });
@@ -1713,7 +1713,7 @@ class _IndexSondeurState extends State<IndexSondeur>
       prefs.clear().then((value) {
         if (value) {
           js.context
-              .callMethod('open', ['https://test-diack.nataal.shop/', '_self']);
+              .callMethod('open', ['https://test-diag.saharux.com/', '_self']);
         }
       });
     });
