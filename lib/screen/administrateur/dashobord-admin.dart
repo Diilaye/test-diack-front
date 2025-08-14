@@ -456,7 +456,7 @@ class DashbordAdminScreen extends StatelessWidget {
                         SharedPreferences.getInstance().then((prefs) {
                           prefs.clear();
                           js.context.callMethod('open',
-                              ['http://testing.simplonsolution.com/', '_self']);
+                              ['https://test-diag.saharux.com/', '_self']);
                         });
                       }
                     }),

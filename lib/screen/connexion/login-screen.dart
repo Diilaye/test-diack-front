@@ -518,7 +518,7 @@ class _LoginScreenState extends State<LoginScreen>
                           await authBloc.login();
                           if (authBloc.userModel != null) {
                             js.context.callMethod('open',
-                                ['http://testing.simplonsolution.com/', '_self']);
+                                ['https://test-diag.saharux.com/', '_self']);
                           }
                         },
                   child: Container(

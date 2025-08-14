@@ -87,7 +87,7 @@ class HomePageSondeur extends StatelessWidget {
                                 print(value);
                                 if (value) {
                                   js.context.callMethod('open', [
-                                    'http://testing.simplonsolution.com/',
+                                    'https://test-diag.saharux.com/',
                                     '_self'
                                   ]);
                                 }

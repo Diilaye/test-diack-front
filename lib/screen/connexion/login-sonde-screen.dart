@@ -142,7 +142,7 @@ class LoginSondeScreen extends StatelessWidget {
                                 if (authBloc.resultE == "1") {
                                   print("TOus est bene");
                                   js.context.callMethod('open', [
-                                    'http://testing.simplonsolution.com/formulaire-view-sonde/$id',
+                                    'https://test-diag.saharux.com/formulaire-view-sonde/$id',
                                     '_self'
                                   ]);
                                 }
