@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // ignore: use_full_hex_values_for_flutter_colors
-Color primary = const Color(0xff578585);
+Color primary = const Color(0xffE40046);
 
 // ignore: use_full_hex_values_for_flutter_colors
 Color primary1 = const Color(0xff242037);
@@ -17,7 +17,7 @@ Color secondary2 = const Color(0xffF36A44);
 Color secondary3 = const Color(0xffF7ECE2);
 // ignore: use_full_hex_values_for_flutter_colors
 Color secondary4 = const Color(0xffC5D6D5);
-Color btnColor = const Color(0xff0EC4E0);
+Color btnColor = const Color(0xffE40046);
 
 // ignore: use_full_hex_values_for_flutter_colors
 Color rouge = const Color(0xff9D0208);

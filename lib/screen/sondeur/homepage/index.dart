@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form/blocs/formulaire-sondeur-bloc.dart';
+import 'package:form/utils/app_theme.dart';
 import 'package:form/utils/get-date-by-dii.dart';
 import 'package:form/utils/request-dialog.dart';
 import 'package:go_router/go_router.dart';
@@ -38,8 +39,8 @@ class _IndexSondeurState extends State<IndexSondeur>
   String _viewMode = 'grid'; // 'grid' ou 'list'
 
   // Theme colors - Plus professionnel
-  final Color _primaryColor = const Color(0xFF1E293B); // Slate 800
-  final Color _accentColor = const Color(0xFF3B82F6); // Blue 500
+  final Color _primaryColor = const Color(0xFFE40046); // Slate 800
+  final Color _accentColor = const Color(0xFFE40046); // Blue 500
   final Color _successColor = const Color(0xFF10B981); // Emerald 500
   final Color _warningColor = const Color(0xFFF59E0B); // Amber 500
   final Color _backgroundColor = const Color(0xFFF8FAFC); // Slate 50
@@ -205,7 +206,7 @@ class _IndexSondeurState extends State<IndexSondeur>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'FormCraft',
+                  'Simplon Form',
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -235,6 +236,7 @@ class _IndexSondeurState extends State<IndexSondeur>
                     true,
                     () {},
                   ),
+                  /*
                   _buildSidebarItem(
                     CupertinoIcons.doc_text,
                     'Formulaires',
@@ -253,6 +255,7 @@ class _IndexSondeurState extends State<IndexSondeur>
                     false,
                     () {},
                   ),
+                  */
                   const Spacer(),
                   _buildSidebarItem(
                     CupertinoIcons.power,
@@ -320,7 +323,7 @@ class _IndexSondeurState extends State<IndexSondeur>
         color: _cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppTheme.primaryColor.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 1),
           ),
@@ -563,7 +566,7 @@ class _IndexSondeurState extends State<IndexSondeur>
           DateTime.now().difference(DateTime.parse(e.date!)).inDays;
       return difference <= 7;
     }).length;
-    _stats['responses'] = math.Random().nextInt(500) + 100;
+    _stats['responses'] = 0;
   }
 
   List _getFilteredForms(FormulaireSondeurBloc bloc) {

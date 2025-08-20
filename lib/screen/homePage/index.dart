@@ -235,16 +235,16 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppTheme.primaryColor, AppTheme.secondaryColor],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              //  gradient: LinearGradient(
+              //  colors: [AppTheme.primaryColor],
+              //begin: Alignment.topLeft,
+              // end: Alignment.bottomRight,
+              //),
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.3),
-                  blurRadius: 8,
+                  color: AppTheme.primaryColor.withOpacity(0.7),
+                  //blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
@@ -259,7 +259,7 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'FormBuilder',
+                  'Simplon Forms',
                   style: GoogleFonts.inter(
                     color: AppTheme.surfaceColor,
                     fontSize: 18,

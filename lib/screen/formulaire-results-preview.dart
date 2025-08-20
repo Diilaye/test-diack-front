@@ -6,13 +6,7 @@ import 'package:form/services/formulaire-service.dart';
 import 'package:form/utils/colors-by-dii.dart';
 import 'package:form/responsive.dart';
 
-class FormulaireResultsPreview extends S                  Text(
-                    champ.nom ?? 'Question sans titre',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),Widget {
+class FormulaireResultsPreview extends StatefulWidget {
   final String formulaireId;
 
   const FormulaireResultsPreview({
@@ -28,7 +22,7 @@ class FormulaireResultsPreview extends S                  Text(
 class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
     with TickerProviderStateMixin {
   final FormulaireService _formulaireService = FormulaireService();
-  
+
   FormulaireSondeurModel? _formulaire;
   List<ChampsFormulaireModel> _champs = [];
   Map<String, List<ReponseSondeurModel>> _responses = {};
@@ -51,7 +45,7 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -59,7 +53,7 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
-    
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
@@ -83,12 +77,14 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
       }
 
       // Charger les champs
-      final champs = await _formulaireService.getFormulaireChamps(widget.formulaireId);
-      
+      final champs =
+          await _formulaireService.getFormulaireChamps(widget.formulaireId);
+
       // Charger les réponses pour chaque champ
       Map<String, List<ReponseSondeurModel>> responses = {};
       for (var champ in champs) {
-        final champsResponses = await _formulaireService.getReponseFormulaire(champ.id ?? '');
+        final champsResponses =
+            await _formulaireService.getReponseFormulaire(champ.id ?? '');
         responses[champ.id ?? ''] = champsResponses;
       }
 
@@ -254,15 +250,13 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
   }
 
   Widget _buildStatisticsOverview() {
-    final totalResponses = _responses.values
-        .expand((responses) => responses)
-        .length;
+    final totalResponses =
+        _responses.values.expand((responses) => responses).length;
 
     final totalChamps = _champs.length;
-    
-    final champsWithResponses = _responses.entries
-        .where((entry) => entry.value.isNotEmpty)
-        .length;
+
+    final champsWithResponses =
+        _responses.entries.where((entry) => entry.value.isNotEmpty).length;
 
     return Card(
       elevation: 4,
@@ -316,7 +310,8 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String title, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -377,7 +372,8 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
     );
   }
 
-  Widget _buildChampResults(ChampsFormulaireModel champ, List<ReponseSondeurModel> responses) {
+  Widget _buildChampResults(
+      ChampsFormulaireModel champ, List<ReponseSondeurModel> responses) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -389,7 +385,8 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: _getTypeColor(champ.type ?? '').withOpacity(0.1),
                     borderRadius: BorderRadius.circular(6),
@@ -406,7 +403,7 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    champ.label ?? 'Question sans titre',
+                    champ.nom ?? 'Question sans titre',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -449,11 +446,12 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
     );
   }
 
-  Widget _buildResponsesList(ChampsFormulaireModel champ, List<ReponseSondeurModel> responses) {
+  Widget _buildResponsesList(
+      ChampsFormulaireModel champ, List<ReponseSondeurModel> responses) {
     // Grouper les réponses identiques pour les afficher avec leur nombre d'occurrences
     final Map<String, int> responseCounts = {};
     for (var response in responses) {
-      final value = response.value ?? '';
+      final value = response.responseEtat ?? '';
       responseCounts[value] = (responseCounts[value] ?? 0) + 1;
     }
 
@@ -484,7 +482,7 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
                           '${entry.value} ($percentage%)',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColor.primaryColor,
+                            color: primary,
                           ),
                         ),
                       ],
@@ -494,7 +492,7 @@ class _FormulaireResultsPreviewState extends State<FormulaireResultsPreview>
                       value: entry.value / responses.length,
                       backgroundColor: Colors.grey[200],
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColor.primaryColor.withOpacity(0.7),
+                        primary.withOpacity(0.7),
                       ),
                     ),
                   ],

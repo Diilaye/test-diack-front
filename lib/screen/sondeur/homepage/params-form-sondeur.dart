@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form/blocs/formulaire-sondeur-bloc.dart';
 import 'package:form/models/folder-model.dart';
+import 'package:form/utils/app_theme.dart';
 import 'package:form/utils/colors-by-dii.dart';
 import 'package:form/utils/widget/padding-global.dart';
 import 'package:go_router/go_router.dart';
@@ -160,31 +161,151 @@ class _ParamsFormSondeurScreenState extends State<ParamsFormSondeurScreen> {
         ],
       ),
       actions: [
-        _buildNavButton(CupertinoIcons.building_2_fill, "Construire", false),
-        _buildNavButton(CupertinoIcons.settings, "Paramètres", true),
-        _buildNavButton(CupertinoIcons.share, "Partager", false),
-        Container(
-          width: 1,
-          height: 40,
-          color: Colors.grey[300],
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+        _buildHeaderTab('Construire', CupertinoIcons.building_2_fill, false,
+            onTap: () => context.go(
+                '/formulaire/${formulaireSondeur.formulaireSondeurModel!.id!}/create')),
+        const SizedBox(width: 8),
+        _buildHeaderTab(
+          'Paramètres',
+          CupertinoIcons.settings,
+          true,
         ),
-        _buildNavButton(CupertinoIcons.chart_bar, "Résultats", false),
+        const SizedBox(width: 8),
+        _buildHeaderTab('Partager', CupertinoIcons.share, false,
+            onTap: () => context.go(
+                '/formulaire/${formulaireSondeur.formulaireSondeurModel!.id!}/share')),
+        const SizedBox(width: 8),
+        _buildHeaderTab('Résultats', CupertinoIcons.chart_bar_alt_fill, false,
+            onTap: () => context.go(
+                '/formulaire/${formulaireSondeur.formulaireSondeurModel!.id!}/results')),
         const SizedBox(width: 32),
         _buildActionButton(
           icon: CupertinoIcons.eye,
-          label: "Prévisualiser",
-          onTap: () {},
-          isSecondary: true,
+          tooltip: 'Aperçu',
+          isPrimary: false,
+          onTap: () {
+            // Naviguer vers l'aperçu du formulaire
+            context
+                .go('/form/${formulaireSondeur.formulaireSondeurModel!.id!}');
+          },
         ),
         const SizedBox(width: 12),
         _buildActionButton(
-          icon: Icons.save_outlined,
-          label: "Sauvegarder",
+          icon: Icons.save_rounded,
+          label: 'Sauvegarder',
+          tooltip: 'Sauvegarder le formulaire',
+          isPrimary: true,
           onTap: () {},
         ),
         const SizedBox(width: 32),
       ],
+    );
+  }
+
+  Widget _buildHeaderTab(String label, IconData icon, bool isActive,
+      {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: isActive
+              ? AppTheme.primaryColor.withOpacity(0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: isActive
+              ? Border(
+                  bottom: BorderSide(color: AppTheme.primaryColor, width: 3))
+              : null,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isActive ? AppTheme.primaryColor : Colors.grey.shade600,
+              size: 20,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                color: isActive ? AppTheme.primaryColor : Colors.grey.shade600,
+                fontFamily: 'Rubik',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    String? label,
+    required String tooltip,
+    required bool isPrimary,
+    required VoidCallback onTap,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: EdgeInsets.symmetric(
+              horizontal: label != null ? 20 : 12,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              gradient: isPrimary
+                  ? LinearGradient(
+                      colors: [btnColor, btnColor.withOpacity(0.8)])
+                  : null,
+              color: isPrimary ? null : Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: isPrimary
+                      ? btnColor.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.1),
+                  blurRadius: isPrimary ? 8 : 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+              border: !isPrimary
+                  ? Border.all(color: Colors.grey.shade300, width: 1)
+                  : null,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  color: isPrimary ? Colors.white : Colors.grey.shade700,
+                  size: 16,
+                ),
+                if (label != null) ...[
+                  const SizedBox(width: 8),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: isPrimary ? Colors.white : Colors.grey.shade700,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -230,45 +351,6 @@ class _ParamsFormSondeurScreenState extends State<ParamsFormSondeurScreen> {
                 ],
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-    bool isSecondary = false,
-  }) {
-    return Material(
-      color: isSecondary ? Colors.white : btnColor,
-      borderRadius: BorderRadius.circular(8),
-      elevation: 1,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                color: isSecondary ? Colors.grey[700] : Colors.white,
-                size: 16,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: isSecondary ? Colors.grey[700] : Colors.white,
-                ),
-              ),
-            ],
           ),
         ),
       ),

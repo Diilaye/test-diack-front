@@ -34,27 +34,27 @@ class _FormResponseFieldState extends State<FormResponseField> {
     super.didUpdateWidget(oldWidget);
     // Ne réinitialiser que si la valeur du widget a changé mais que le contrôleur
     // ne contient pas déjà cette valeur (éviter la boucle infinie)
-    if (oldWidget.value != widget.value && 
+    if (oldWidget.value != widget.value &&
         widget.value != null &&
         (widget.champ.type == 'textField' ||
-         widget.champ.type == 'text' ||
-         widget.champ.type == 'textArea' ||
-         widget.champ.type == 'email' ||
-         widget.champ.type == 'telephone' ||
-         widget.champ.type == 'nomComplet' ||
-         widget.champ.type == 'addresse') &&
+            widget.champ.type == 'text' ||
+            widget.champ.type == 'textArea' ||
+            widget.champ.type == 'email' ||
+            widget.champ.type == 'telephone' ||
+            widget.champ.type == 'nomComplet' ||
+            widget.champ.type == 'addresse') &&
         _controller.text != widget.value.toString()) {
       // Seulement réinitialiser pour les types non-texte ou si le texte est différent
       _initializeValue();
-    } else if (oldWidget.value != widget.value && 
-               widget.value != null &&
-               widget.champ.type != 'textField' &&
-               widget.champ.type != 'text' &&
-               widget.champ.type != 'textArea' &&
-               widget.champ.type != 'email' &&
-               widget.champ.type != 'telephone' &&
-               widget.champ.type != 'nomComplet' &&
-               widget.champ.type != 'addresse') {
+    } else if (oldWidget.value != widget.value &&
+        widget.value != null &&
+        widget.champ.type != 'textField' &&
+        widget.champ.type != 'text' &&
+        widget.champ.type != 'textArea' &&
+        widget.champ.type != 'email' &&
+        widget.champ.type != 'telephone' &&
+        widget.champ.type != 'nomComplet' &&
+        widget.champ.type != 'addresse') {
       // Pour les autres types (multiChoice, date, etc.), toujours réinitialiser
       _initializeValue();
     }
@@ -81,13 +81,13 @@ class _FormResponseFieldState extends State<FormResponseField> {
           // Sauvegarder la position actuelle du curseur
           int cursorPosition = _controller.selection.start;
           _controller.text = newText;
-          
+
           // Restaurer la position du curseur à la fin si possible
           int newCursorPosition = cursorPosition;
           if (newCursorPosition > newText.length) {
             newCursorPosition = newText.length;
           }
-          
+
           // Seulement restaurer le curseur si le widget est monté et focusé
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
@@ -110,9 +110,9 @@ class _FormResponseFieldState extends State<FormResponseField> {
   @override
   Widget build(BuildContext context) {
     // Pour les types spéciaux qui ne nécessitent pas de titre séparé
-    if (widget.champ.type == 'separator' || 
-        widget.champ.type == 'separator-title' || 
-        widget.champ.type == 'separatorTitre' || 
+    if (widget.champ.type == 'separator' ||
+        widget.champ.type == 'separator-title' ||
+        widget.champ.type == 'separatorTitre' ||
         widget.champ.type == 'explication') {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -543,7 +543,8 @@ class _FormResponseFieldState extends State<FormResponseField> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Titre de l'explication
-                    if (widget.champ.nom != null && widget.champ.nom!.isNotEmpty)
+                    if (widget.champ.nom != null &&
+                        widget.champ.nom!.isNotEmpty)
                       Text(
                         widget.champ.nom!,
                         style: TextStyle(
@@ -553,8 +554,10 @@ class _FormResponseFieldState extends State<FormResponseField> {
                         ),
                       ),
                     // Description de l'explication
-                    if (widget.champ.description != null && widget.champ.description!.isNotEmpty) ...[
-                      if (widget.champ.nom != null && widget.champ.nom!.isNotEmpty)
+                    if (widget.champ.description != null &&
+                        widget.champ.description!.isNotEmpty) ...[
+                      if (widget.champ.nom != null &&
+                          widget.champ.nom!.isNotEmpty)
                         const SizedBox(height: 8),
                       Text(
                         widget.champ.description!,

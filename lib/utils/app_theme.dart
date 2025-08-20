@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // 3 Couleurs de base du thème
-  static const Color primaryColor = Color(0xFF2563EB); // Bleu principal
-  static const Color secondaryColor = Color(0xFF059669); // Vert secondaire
-  static const Color accentColor = Color(0xFF7C3AED); // Violet accent
+  static const Color primaryColor = Color(0xFFE40046); // Bleu principal
+  static const Color secondaryColor = Color(0xFF00313C); // Vert secondaire
+  static const Color accentColor = Color(0xFFE40046); // Violet accent
 
   // Couleurs dérivées
   static const Color backgroundColor = Color(0xFFF8FAFC);
@@ -26,14 +26,14 @@ class AppTheme {
 
   // Gradient principal
   static LinearGradient get primaryGradient => LinearGradient(
-        colors: [primaryColor, accentColor],
+        colors: [primaryColor, primaryColor],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );
 
   // Gradient secondaire
   static LinearGradient get secondaryGradient => LinearGradient(
-        colors: [secondaryColor, primaryColor],
+        colors: [secondaryColor, secondaryColor],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       );

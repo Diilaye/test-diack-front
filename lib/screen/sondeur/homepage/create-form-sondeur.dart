@@ -28,6 +28,7 @@ import 'package:form/utils/requette-by-dii.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:form/blocs/folder-bloc.dart';
+import 'package:form/utils/app_theme.dart';
 
 class CreateFormSondeurScreen extends StatefulWidget {
   const CreateFormSondeurScreen({super.key});
@@ -321,10 +322,13 @@ class _CreateFormSondeurScreenState extends State<CreateFormSondeurScreen>
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isActive ? btnColor.withOpacity(0.1) : Colors.transparent,
+          color: isActive
+              ? AppTheme.primaryColor.withOpacity(0.1)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: isActive
-              ? Border(bottom: BorderSide(color: btnColor, width: 3))
+              ? Border(
+                  bottom: BorderSide(color: AppTheme.primaryColor, width: 3))
               : null,
         ),
         child: Column(
@@ -332,7 +336,7 @@ class _CreateFormSondeurScreenState extends State<CreateFormSondeurScreen>
           children: [
             Icon(
               icon,
-              color: isActive ? btnColor : Colors.grey.shade600,
+              color: isActive ? AppTheme.primaryColor : Colors.grey.shade600,
               size: 20,
             ),
             const SizedBox(height: 4),
@@ -341,7 +345,7 @@ class _CreateFormSondeurScreenState extends State<CreateFormSondeurScreen>
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? btnColor : Colors.grey.shade600,
+                color: isActive ? AppTheme.primaryColor : Colors.grey.shade600,
                 fontFamily: 'Rubik',
               ),
             ),

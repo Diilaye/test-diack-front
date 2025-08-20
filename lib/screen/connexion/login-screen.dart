@@ -26,8 +26,8 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _shimmerAnimation;
 
   // Theme colors
-  final Color _primaryColor = const Color(0xFF6366F1); // Modern Indigo
-  final Color _secondaryColor = const Color(0xFF8B5CF6); // Modern Purple
+  final Color _primaryColor = const Color(0xFFE40046); // Modern Indigo
+  final Color _secondaryColor = const Color(0xFF00313C); // Modern Purple
   final Color _accentColor = const Color(0xFF06B6D4); // Cyan
   final Color _gradientStart = const Color(0xFF667EEA);
   final Color _gradientEnd = const Color(0xFF764BA2);
@@ -140,10 +140,10 @@ class _LoginScreenState extends State<LoginScreen>
         children: [
           // Background animé avec gradient
           _buildAnimatedBackground(),
-          
+
           // Particules flottantes
           _buildFloatingParticles(),
-          
+
           // Contenu principal
           Container(
             width: double.infinity,
@@ -172,7 +172,8 @@ class _LoginScreenState extends State<LoginScreen>
                               position: _slideAnimation,
                               child: ScaleTransition(
                                 scale: _scaleAnimation,
-                                child: _buildMainContent(authBloc, isMobile, isTablet),
+                                child: _buildMainContent(
+                                    authBloc, isMobile, isTablet),
                               ),
                             ),
                           );
@@ -243,7 +244,7 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
               ),
             ),
-            
+
             // Particule 2
             Positioned(
               top: 200 + _floatingAnimation.value * -40,
@@ -262,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
               ),
             ),
-            
+
             // Particule 3
             Positioned(
               bottom: 150 + _floatingAnimation.value * 60,
@@ -299,22 +300,11 @@ class _LoginScreenState extends State<LoginScreen>
               child: Transform.scale(
                 scale: _pulseAnimation.value,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [_primaryColor, _secondaryColor, _accentColor],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _primaryColor.withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
+                      borderRadius: BorderRadius.circular(15),
+                      color: _primaryColor),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -325,7 +315,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'FormBuilder',
+                        'Simplon Form',
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 18,
@@ -530,7 +520,8 @@ class _LoginScreenState extends State<LoginScreen>
                               height: 24,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : Row(
@@ -767,7 +758,8 @@ class _LoginScreenState extends State<LoginScreen>
                               height: 24,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : Row(
